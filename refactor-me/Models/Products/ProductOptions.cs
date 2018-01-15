@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
-
+using System.Text;
 
 namespace refactor_me.Models
 {
@@ -12,28 +12,42 @@ namespace refactor_me.Models
 
         public ProductOptions()
         {
-            LoadProductOptions(null);
+            FetchProductOptions(null);
         }
 
         public ProductOptions(Guid productId)
         {
-            LoadProductOptions($"where productid = '{productId}'");
+            FetchProductOptions(productId);
         }
 
-        private void LoadProductOptions(string where)
+        private void FetchProductOptions(Guid? productId)
         {
-            Items = new List<ProductOption>();
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand($"select id from productoption {where}", conn);
-            conn.Open();
+            var qry = new StringBuilder();
+            qry.Append("SELECT * ");
+            qry.Append(@"FROM [productoption] ");
 
-            var rdr = cmd.ExecuteReader();
+            if (productId != null)
+            {
+                qry.Append(" WHERE productId = @0 ");
+                var whereParameters = new List<SqlParameter> { new SqlParameter("@0", productId) };
+                SelectData(qry, whereParameters);
+            }
+            else
+            {
+                SelectData(qry);
+            }          
+        }
+
+        #region internal Overrides
+        internal override void SetReaderValues(ref SqlDataReader rdr)
+        {
             while (rdr.Read())
             {
                 var id = Guid.Parse(rdr["id"].ToString());
                 Items.Add(new ProductOption(id));
             }
         }
+        #endregion internal Overrides
     }
 
 }

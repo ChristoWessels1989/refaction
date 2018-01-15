@@ -1,38 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Text;
 using Newtonsoft.Json;
-
 
 namespace refactor_me.Models
 {
-   public class Products: BusinessListBase<Products,Product>
+    public class Products : BusinessListBase<Products, Product>
     {
         public List<Product> Items { get; private set; }
 
         public Products()
         {
-            LoadProducts(null);
+            FetchProducts(null);
         }
 
         public Products(string name)
         {
-            LoadProducts($"where lower(name) like '%{name.ToLower()}%'");
+            FetchProducts(name.ToLower());
         }
 
-        private void LoadProducts(string where)
+        private void FetchProducts(string name)
         {
-            Items = new List<Product>();
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand($"select id from product {where}", conn);
-            conn.Open();
+            var qry = new StringBuilder();
+            qry.Append("SELECT * ");
+            qry.Append(@"FROM [PRODUCT] ");
+            if (name != null)
+            {
+                qry.Append(" where lower(name) like '%@0%' ");
+                var whereParameters = new List<SqlParameter> { new SqlParameter("@0", name.ToLower()) };
+                SelectData(qry, whereParameters);
+            }else
+            {
+                SelectData(qry);
+            }
+        }
 
-            var rdr = cmd.ExecuteReader();
+        #region internal Overrides
+        internal override void SetReaderValues(ref SqlDataReader rdr)
+        {
+          
             while (rdr.Read())
             {
                 var id = Guid.Parse(rdr["id"].ToString());
                 Items.Add(new Product(id));
             }
         }
+        #endregion internal Overrides
     }
 }

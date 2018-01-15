@@ -112,7 +112,7 @@ namespace refactor_me.Models
     #endregion Data Portal
 
     #region internal Overrides
-      internal override void SetFieldsReader(SqlDataReader rdr)
+      internal override void SetFieldsReader(ref SqlDataReader rdr)
       {
         if (rdr == null)
           return;
