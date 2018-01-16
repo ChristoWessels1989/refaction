@@ -17,15 +17,15 @@ namespace refactor_me.Models
         [JsonIgnore]
         public bool IsNew { get; set; }
 
-        public abstract void Delete();
+        public abstract void Delete(); //all models inherits from base and all of then needs a delete function
 
-        public abstract void Save();
+        public abstract void Save();  //all models inherits from base and all of then needs a save function
 
-        internal abstract void SetFieldsReader(ref SqlDataReader rdr);
+        internal abstract void SetFieldsReader(ref SqlDataReader rdr);  //method to cater for the data reader field mapping
 
-        internal abstract List<SqlParameter> PrepareCommandParameters();
+        internal abstract List<SqlParameter> PrepareCommandParameters();  //method to cater for the SQL Parameters
 
-        internal void SelectData(StringBuilder qry, IEnumerable<SqlParameter> whereParameters = null)
+        internal void SelectData(StringBuilder qry, IEnumerable<SqlParameter> whereParameters = null) //method that selects data from database
         {
             try
             {
@@ -57,7 +57,7 @@ namespace refactor_me.Models
             }
         }
 
-        internal void InsertData(StringBuilder qry)
+        internal void InsertData(StringBuilder qry)//method that inserts data to database
         {
             try
             {
@@ -84,7 +84,7 @@ namespace refactor_me.Models
             }
         }
 
-        internal void UpdateData(StringBuilder qry)
+        internal void UpdateData(StringBuilder qry) //method that update data to database
         {
             try
             {
@@ -109,7 +109,7 @@ namespace refactor_me.Models
            
         }
 
-        internal void DeleteData(StringBuilder qry)
+        internal void DeleteData(StringBuilder qry) //method that update data from database
         {
             try
             {

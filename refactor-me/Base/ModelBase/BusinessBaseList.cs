@@ -14,7 +14,7 @@ namespace refactor_me.Models
   public abstract class BusinessListBase<T,C>
     where C : BusinessBase<C>
   {
-        internal abstract void SetReaderValues(ref SqlDataReader rdr);
+        internal abstract void SetReaderValues(ref SqlDataReader rdr); //method to let model know what to do with data from reader
 
         public void SelectData(StringBuilder qry, IEnumerable<SqlParameter> whereParameters = null)
     {
@@ -46,6 +46,6 @@ namespace refactor_me.Models
         {
           throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
         }
-    }
+    }//method that selects data from database
   }
 }
