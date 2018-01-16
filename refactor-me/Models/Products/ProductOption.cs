@@ -17,9 +17,7 @@ namespace refactor_me.Models
       public string Name { get; set; }
 
       public string Description { get; set; }
-
-      [JsonIgnore]
-      public bool IsNew { get; set; }
+    
     #endregion Properties
 
     #region constructors
@@ -31,21 +29,8 @@ namespace refactor_me.Models
 
       public ProductOption(Guid id)
       {
-         IsNew = true;
-          var conn = Helpers.NewConnection();
-          var cmd = new SqlCommand($"select * from productoption where id = '{id}'", conn);
-          conn.Open();
-
-          var rdr = cmd.ExecuteReader();
-          if (!rdr.Read())
-              return;
-
-          IsNew = false;
-          Id = Guid.Parse(rdr["Id"].ToString());
-          ProductId = Guid.Parse(rdr["ProductId"].ToString());
-          Name = rdr["Name"].ToString();
-          Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
-         FetchProductOption(id);
+        IsNew = true;
+        FetchProductOption(id);
       }
     #endregion constructor
 

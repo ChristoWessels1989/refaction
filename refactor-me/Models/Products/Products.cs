@@ -43,6 +43,10 @@ namespace refactor_me.Models
             while (rdr.Read())
             {
                 var id = Guid.Parse(rdr["id"].ToString());
+                if (Items == null)
+                {
+                  Items = new List<Product>();
+                }
                 Items.Add(new Product(id));
             }
         }

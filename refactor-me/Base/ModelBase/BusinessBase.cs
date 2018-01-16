@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Web;
+using System.Web.Http;
 using Newtonsoft.Json;
 
 namespace refactor_me.Models
@@ -11,6 +14,8 @@ namespace refactor_me.Models
     [Serializable()]
     public abstract class BusinessBase<T>
     {
+        [JsonIgnore]
+        public bool IsNew { get; set; }
 
         public abstract void Delete();
 
@@ -20,7 +25,7 @@ namespace refactor_me.Models
 
         internal abstract List<SqlParameter> PrepareCommandParameters();
 
-        public void SelectData(StringBuilder qry, IEnumerable<SqlParameter> whereParameters = null)
+        internal void SelectData(StringBuilder qry, IEnumerable<SqlParameter> whereParameters = null)
         {
             try
             {
@@ -48,7 +53,7 @@ namespace refactor_me.Models
             }
             catch (Exception ex)
             {
-                throw; //Exception handling
+              throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
 
@@ -75,7 +80,7 @@ namespace refactor_me.Models
             }
             catch (Exception ex)
             {
-                throw; //Exception handling
+              throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
 
@@ -99,7 +104,7 @@ namespace refactor_me.Models
             }
             catch (Exception ex)
             {
-                throw; //Exception handling
+              throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
            
         }
@@ -123,7 +128,7 @@ namespace refactor_me.Models
             }
             catch (Exception ex)
             {
-                throw; //Error Handling
+              throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
     }

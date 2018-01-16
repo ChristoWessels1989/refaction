@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Text;
 using System.Data.SqlClient;
+using System.Web.Http;
 
 
 namespace refactor_me.Models
@@ -41,7 +44,7 @@ namespace refactor_me.Models
         }
         catch (Exception ex)
         {
-            throw; //Exception handling
+          throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
         }
     }
   }

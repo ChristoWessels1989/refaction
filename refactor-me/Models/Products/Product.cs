@@ -19,9 +19,6 @@ namespace refactor_me.Models
       public decimal Price { get; set; }
 
       public decimal DeliveryPrice { get; set; }
-        
-      [JsonIgnore]
-      public bool IsNew { get; set; }
 
     #endregion Properties
 
@@ -34,6 +31,7 @@ namespace refactor_me.Models
 
       public Product(Guid id)
       {
+        IsNew = true;
         FetchProduct(id);
       }
     #endregion constructor

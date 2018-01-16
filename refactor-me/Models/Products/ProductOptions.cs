@@ -41,11 +41,16 @@ namespace refactor_me.Models
         #region internal Overrides
         internal override void SetReaderValues(ref SqlDataReader rdr)
         {
-            while (rdr.Read())
+
+          while (rdr.Read())
+          {
+            var id = Guid.Parse(rdr["id"].ToString());
+            if (Items == null)
             {
-                var id = Guid.Parse(rdr["id"].ToString());
-                Items.Add(new ProductOption(id));
+              Items = new List<ProductOption>();
             }
+            Items.Add(new ProductOption(id));
+          }
         }
         #endregion internal Overrides
     }
